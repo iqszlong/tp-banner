@@ -1,0 +1,223 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>tp-banner demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../../paper-button/paper-button.html">
+    <link rel="import" href="../../iron-icon/iron-icon.html">
+    <link rel="import" href="../../iron-icons/iron-icons.html">
+    <link rel="import" href="../../iron-icons/communication-icons.html">
+    <link rel="import" href="../tp-banner.html">
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
+</head>
+
+<body>
+    <div class="vertical-section-container centered">
+    
+        <h3>基本tp-banner示例</h3>
+        <demo-snippet>
+            <template>
+                <tp-banner>Top banner</tp-banner>
+            </template>
+        </demo-snippet>
+        <h3>tp-banner 增加文字调整文字颜色和背景</h3>
+        <demo-snippet>
+            <template>
+                <style is="custom-style">
+                #demo {
+                    --text-style: {
+                        color: #fff;
+                    }
+                    --placeholder-bg: {
+                        background: var(--paper-indigo-500);
+                    }
+                }
+                </style>
+                <tp-banner id="demo">
+                    <h1>Tp-banner</h1>
+                    <p>Desc here!</p>
+                </tp-banner>
+            </template>
+        </demo-snippet>
+        <h3>tp-banner 带背景图片加文字投影与链接</h3>
+        <demo-snippet>
+            <template>
+                <style is="custom-style">
+                #demo1 {
+                    --text-style: {
+                        color: #fff;
+                        text-shadow: 0 0 15px rgba(0, 0, 0, 0.95);
+                    }
+                    --placeholder-bg: {
+                        background: var(--paper-blue-900);
+                    }
+                }
+                
+                a {
+                    text-decoration: none;
+                }
+                
+                paper-button.indigo {
+                    background-color: var(--paper-blue-500);
+                    color: white;
+                    text-shadow: none;
+                    margin: 1rem 0 0;
+                    --paper-button-raised-keyboard-focus: {
+                        background-color: var(--paper-pink-a200) !important;
+                        color: white !important;
+                    }
+                }
+                </style>
+                <tp-banner id="demo1" scale="2x3" src="http://7te9fb.com1.z0.glb.clouddn.com/pic/5638f5a99a37c4b04fc60f696e631b4e2604388e554c4.jpg">
+                    <h1>无论你站在哪里，都代表了不同的色彩。</h1>
+                    <p>每日一图</p>
+                    <a href="http://opixer.com" target="_blank" tabindex="-1">
+                        <paper-button raised class="indigo">查看更多</paper-button>
+                    </a>
+                </tp-banner>
+            </template>
+        </demo-snippet>
+
+        <h3>基本tp-banner视频示例</h3>
+        <demo-snippet>
+            <template>
+            <style is="custom-style">
+            #demo0{
+                --text-style:{
+                    color: #fff;
+                    text-shadow: 0 0 10px rgba(0,0,0,0.95);
+                }
+                --mask-style: {
+                    background-color: rgba(0, 0, 0, 0);
+                    background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+                    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+                }
+            }
+            </style>
+                <tp-banner id="demo0" mask type="media" position="center" src="http://7ktvhj.com1.z0.glb.clouddn.com/Car%20On%20Mountain%20Road.mp4">
+    
+                    <h2>说走就走<br/>的<br/>旅行</h2>
+   
+                </tp-banner>
+            </template>
+        </demo-snippet>
+
+        <h3>tp-banner 半透明遮罩示例</h3>
+        <demo-snippet>
+            <template>
+                <style is="custom-style">
+                #demo2 {
+                    --text-style: {
+                        color: #fff;
+                        text-shadow: 0 0 20px rgba(0, 0, 0, 0.95);
+                    }
+                    --mask-style: {
+                        background-color: rgba(175, 111, 47, 0.3);
+                    }
+                }
+                </style>
+                <tp-banner id="demo2" position="center" mask src="http://7te9fb.com1.z0.glb.clouddn.com/wallpapera_dreamy_world_125.jpg-16x9">
+                    <h1>秋意浓</h1>
+                    <p>每日一图</p>
+                </tp-banner>
+            </template>
+        </demo-snippet>
+        <h3>tp-banner 渐变遮罩加文字位置示例</h3>
+        <demo-snippet>
+            <template>
+                <style is="custom-style">
+                #demo3 {
+                    background: var(--paper-brown-500);
+                    --text-style: {
+                        color: #fff;
+                        text-shadow: 0 0 15px rgba(0, 0, 0, 0.95);
+                    }
+                    --placeholder-bg:{
+                        
+                    }
+                    --mask-style: {
+                        background-color: rgba(0, 0, 0, 0);
+                        background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+                        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+                    }
+                }
+                </style>
+                <tp-banner id="demo3" size="contain" position="left bottom" mask src="http://7te9fb.com1.z0.glb.clouddn.com/png/image1.png">
+                    <h2>Top Hamburger</h2>
+                </tp-banner>
+            </template>
+        </demo-snippet>
+        <h3>tp-banner 图片位置示例</h3>
+        <demo-snippet>
+            <template>
+                <style is="custom-style">
+                #demo4 {
+                    --text-style: {
+                        color: #fff;
+                        text-shadow: 0 0 15px rgba(0, 0, 0, 0.95);
+                    }
+                }
+                </style>
+                <tp-banner id="demo4" scale="3x2" position="left bottom" src="http://7te9fb.com1.z0.glb.clouddn.com/pic/korea/126382264643410515.jpg" bg-position="bottom">
+                    <div>&copy;iqszlong</div>
+                </tp-banner>
+            </template>
+        </demo-snippet>
+    </div>
+    <div class="vertical-section-container">
+        <h3>tp-banner 全屏示例</h3>
+        <demo-snippet>
+            <template>
+                <style is="custom-style">
+                #demo5 {
+                    --text-style: {
+                        color: #fff;
+                    }
+                    --inner-style: {
+                        padding: 2rem 2rem 2rem 8vw;
+                        background: var(--paper-indigo-500);
+                    }
+                    --placeholder-bg: {
+                        background: #fff url(http://7xim8a.com1.z0.glb.clouddn.com/img/imgs_loader.gif);
+                        background-repeat: no-repeat !important;
+                        background-position: center !important;
+                        background-size: inherit !important;
+                    }
+                }
+                
+                #demo5 h1 {
+                    font-size: 5rem;
+                    margin: 0 0 1rem;
+                }
+                
+                #demo5 a {
+                    color: #fff;
+                    text-decoration: underline;
+                }
+                
+                #demo5 [icon] {
+                    margin-right: 0.5rem;
+                    --iron-icon-height: 16px;
+                    --iron-icon-width: 16px;
+                }
+                </style>
+                <tp-banner id="demo5" scale="full" position="left center" src="http://7te9fb.com1.z0.glb.clouddn.com/RQ-star/241/002.jpg" bg-position="top">
+                    <h1>Iqszlong</h1>
+                    <p>网页设计, 用户界面/用户体验, 交互设计</p>
+                    <p>
+                        <iron-icon icon="communication:location-on"></iron-icon>中国，武汉</p>
+                    <p>
+                        <iron-icon icon="link"></iron-icon><a href="http://www.meicuntech.com" target="_blank">www.meicuntech.com</a></p>
+                </tp-banner>
+            </template>
+        </demo-snippet>
+    </div>
+</body>
+
+</html>

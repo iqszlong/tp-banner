@@ -1,0 +1,338 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-image/iron-image.html">
+<link rel="import" href="../paper-styles/color.html">
+<link rel="import" href="../paper-styles/default-theme.html">
+<!-- 
+`tp-banner`是一个大图配文字内容的banner区域，依赖`iron-image`，在布局上依赖`iron-flex-layout`。
+可以将图片或者视频当作底部背景，加上任意内容来展示效果。
+
+
+例子:
+
+    <tp-banner>Top banner</tp-banner>
+
+Example:
+
+    <tp-banner>
+      <h2>Top banner</h2>
+    </tp-banner>
+
+属性`scale`是指定`tp-banner`的显示比例，默认比例是16:9。
+
+属性`position`是指定内容的显示位置，默认是left top。
+
+属性`bgPosition`指定背景的位置，默认是left top。
+
+属性`mask`是否在图片和文字之间有遮罩，让文字显示的更清楚，默认没有。
+
+属性`muted`是否静音，默认静音。
+
+内容默认有1个字的内边距。`--inner-style`可以修改边距和其他样式。
+
+Custom property 自定义属性 | Description 描述 | Default 默认
+----------------|-------------|----------
+`--text-style` | 文本样式 | `{}`
+`--placeholder-bg` | 背景占位符，当`src`没指定图片时将作为背景 | `{}`
+`--mask-style` | 遮罩样式 | `{}`
+`--inner-style` | 内容样式 | `{}`
+
+@demo demo/index.html
+ -->
+<dom-module id="tp-banner">
+    <template>
+        <style>
+        :host {
+            display: block;
+            
+            --text-style: {
+                color: var(--primary-text-color);
+            }
+            /* --bg-color:var(--paper-grey-200); */
+            --placeholder-bg:{
+                background: var(--paper-grey-200);
+            }
+            --inner-style: {
+              padding: 1rem;
+            }
+            --mask-style: {
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+        }
+        
+        .wrapper {
+            display: block;
+            position: relative;
+            height: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            --iron-image-placeholder: {
+                 @apply(--placeholder-bg);
+            }
+        }
+
+        .media-cover{
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .media-bg{
+            @apply(--placeholder-bg);
+        }
+        
+        .text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            @apply(--layout);
+            @apply(--text-style);
+        }
+        
+        .text .inner {
+            @apply(--inner-style);
+        }
+        
+        
+        .mask {
+            @apply(--mask-style);
+        }
+        </style>
+        <div class="wrapper">
+            <div class$="text [[_hasMask(mask)]]">
+                <div class="inner">
+                    <content></content>
+                </div>
+            </div>
+            <template is="dom-if" if="[[_equal(type,'img')]]">
+            <iron-image class="cover" src="[[src]]" preload fade sizing="[[size]]" position="[[bgPosition]]"></iron-image>
+            </template>
+            <template is="dom-if" if="[[_equal(type,'media')]]">
+                <video class="media-cover media-bg" src="[[src]]" autoplay loop muted=[[muted]]  poster="[[poster]]"></video>
+            </template>
+        </div>
+    </template>
+    <script>
+    Polymer({
+
+        is: 'tp-banner',
+
+        properties: {
+
+            /**
+             * 资源路径，图片或视频仅限1项
+             * @type {String}
+             */
+            src: {
+                type: String,
+                value:''
+            },
+            /**
+             * 显示比例，可选值为
+             * 16x9（默认），16x10，4x3，3x2，1x1，9x16，10x16，3x4，2x3，1x1，full
+             * @type {String}
+             */
+            scale: {
+                type: String,
+                value: '16x9',
+                observer: '_changeScale'
+            },
+            /**
+             * 图片是否占满整个框，默认占满
+             * @type {String}
+             */
+            size:{
+                type: String,
+                value: 'cover'
+            },
+            /**
+             * 是否有遮罩
+             * @type {Boolean}
+             */
+            mask: {
+                type: Boolean,
+                value: false
+            },
+            /**
+             * 文字位置，文字在显示区域的起始位置
+             * 可选值为：left top（默认），center，left center，left bottom，center top，center bottom，right top，right center，right bottom。
+             * @type {String}
+             */
+            position: {
+                type: String,
+                value: 'left top',
+                observer: '_changePosition'
+            },
+            /**
+             * 图片位置，图片在显示区域的位置
+             * 与iron-image的position相同
+             * @type {String}
+             */
+            bgPosition:{
+                type: String,
+                value: 'center'
+            },
+            /**
+             * `src`的地址的不同，而改变类型。分为`img`和`media`两种类型。默认是`img`视频需要写`type="media"`
+             * @type {String}
+             */
+            type:{
+                type: String,
+                value:'img'
+            },
+            /**
+             * `type="media"`时，视频是否静音
+             * 值为 muted（默认）或''（空字符）
+             * @type {String}
+             */
+            muted:{
+                type: String,
+                value: 'muted'
+            },
+            /**
+             * 封面，当`type`为`media`时有效。
+             * @type {String}
+             */
+            poster:{
+                type: String,
+                value:''
+            },
+            /**
+             * 比例值（百分比%）
+             * @type {String}
+             */
+            _decimal: {
+                type: String,
+                value: '56.25%'
+            },
+            
+        },
+        attached: function() {
+        },  
+        /**
+         * 属性scale发生变化时，触发事件并生成对应样式
+         */
+        _changeScale: function() {
+            var wrapper = this.$$('.wrapper');
+            switch (this.scale) {
+                case '16x9':
+                    this._decimal = 9 / 16 * 100;
+                    wrapper.style.paddingBottom = this._decimal + '%';
+                    break;
+                case '9x16':
+                    this._decimal = 16 / 9 * 100;
+                    wrapper.style.paddingBottom = this._decimal + '%';
+                    break;
+                case '16x10':
+                    this._decimal = 10 / 16 * 100;
+                    wrapper.style.paddingBottom = this._decimal + '%';
+                    break;
+                case '10x16':
+                    this._decimal = 16 / 10 * 100;
+                    wrapper.style.paddingBottom = this._decimal + '%';
+                    break;
+                case '4x3':
+                    this._decimal = 3 / 4 * 100;
+                    wrapper.style.paddingBottom = this._decimal + '%';
+                    break;
+                case '3x4':
+                    this._decimal = 4 / 3 * 100;
+                    wrapper.style.paddingBottom = this._decimal + '%';
+                    break;
+                case '3x2':
+                    this._decimal = 2 / 3 * 100;
+                    wrapper.style.paddingBottom = this._decimal + '%';
+                    break;
+                case '2x3':
+                    this._decimal = 3 / 2 * 100;
+                    wrapper.style.paddingBottom = this._decimal + '%';
+                    break;
+                case '1x1':
+                    this._decimal = 100;
+                    wrapper.style.paddingBottom = this._decimal + '%';
+                    break;
+                case 'full':
+                    wrapper.style.width= '100%';
+                    wrapper.style.paddingBottom = '100vh';
+                    break;
+            }
+        },
+        /**
+         * 判断是否有mask属性
+         * @param  {Boolean}  mask 传递真或假
+         * @return {String}       返回字符'mask'或空字符串
+         */
+        _hasMask: function(mask) {
+            return (mask) ? 'mask' : '';
+        },
+        /**
+         * 修改属性position时会调用这个方法重新设置样式，以修改文字的位置
+         */
+        _changePosition: function() {
+            var inner = this.$$('.inner');
+            switch (this.position) {
+                case 'left top':
+                    inner.style.margin = '0';
+                    break;
+                case 'center':
+                    inner.style.margin = 'auto';
+                    inner.style.textAlign = 'center';
+                    break;
+                case 'left center':
+                    inner.style.margin = 'auto auto auto 0';
+                    break;
+                case 'left bottom':
+                    inner.style.margin = 'auto auto 0 0';
+                    break;
+                case 'center bottom':
+                    inner.style.margin = 'auto auto 0';
+                    inner.style.textAlign = 'center';
+                    break;
+                case 'center top':
+                    inner.style.margin = '0 auto auto';
+                    inner.style.textAlign = 'center';
+                    break;
+                case 'right top':
+                    inner.style.margin = '0 0 auto auto';
+                    inner.style.textAlign = 'right';
+                    break;
+                case 'right center':
+                    inner.style.margin = 'auto 0 auto auto';
+                    inner.style.textAlign = 'right';
+                    break;
+                case 'right bottom':
+                    inner.style.margin = 'auto 0 0 auto';
+                    inner.style.textAlign = 'right';
+                    break;
+                default:
+                    inner.style.margin = '0';
+                    break;
+            }
+        },
+        _equal: function(value1, value2) {
+          return value1 === value2;
+        }
+
+
+    });
+    </script>
+</dom-module>
